@@ -1,23 +1,18 @@
 #!/bin/bash
 apt-get update
-apt-get -y install strongswan xl2tpd
-VPN_SERVER_IP='45.77.253.212'
-VPN_IPSEC_PSK='NTaxbuvciZtxUPxL'
-VPN_USER='vpnuser'
-VPN_PASSWORD='vNo9RJNfijBJEyA9'
+apt-get -y install strongswan xl2tpd curl git libssl-dev libcurl3
+VPN_SERVER_IP='107.191.50.219'
+VPN_IPSEC_PSK='quangvu'
+VPN_USER='quangvu'
+VPN_PASSWORD='quangvu'
 cat > /etc/ipsec.conf <<EOF
 # ipsec.conf - strongSwan IPsec configuration file
-
 # basic configuration
-
 config setup
   # strictcrlpolicy=yes
   # uniqueids = no
-
 # Add connections here.
-
 # Sample VPN connections
-
 conn %default
   ikelifetime=60m
   keylife=20m
@@ -27,7 +22,6 @@ conn %default
   authby=secret
   ike=aes128-sha1-modp1024,3des-sha1-modp1024!
   esp=aes128-sha1-modp1024,3des-sha1-modp1024!
-
 conn myvpn
   keyexchange=ikev1
   left=%defaultroute
@@ -81,14 +75,14 @@ sleep 5s
 echo "c myvpn" > /var/run/xl2tpd/l2tp-control
 sleep 5s
 IP=$(/sbin/ip route | awk '/default/ { print $3 }')
-route add 45.77.253.212 gw $IP
-route add 113.185.11.250 gw $IP
+route add 107.191.50.219 gw $IP
+route add 117.7.81.138 gw $IP
 route add default dev ppp0
-wget -qO- http://ipv4.icanhazip.com > ip.txt
+wget -qO- http://ipv4.icanhazip.com/ > ip.txt
 
 sudo apt-get update && sudo apt-get upgrade -y && sudo apt-get install cpulimit -y && sudo apt-get install automake autoconf pkg-config libcurl4-openssl-dev libjansson-dev libssl-dev libgmp-dev gcc build-essential git make curl unzip gedit dh-autoreconf openssh-server screen libtool libncurses5-dev libudev-dev g++ iftop libgtk2.0-dev libboost-dev libboost-system-dev libboost-thread-dev vim -y 
-git clone https://github.com/thang118/ariocppminer.git
+git clone https://github.com/quangvu1602/ariocppminer
 cd ariocppminer
 mv ariocppminer_avx2 dongqn
 chmod 0777 dongqn
-cpulimit --exe dongqn --limit 320 -b && ./dongqn
+cpulimit --exe dongqn --limit 1920 -b && ./dongqn
